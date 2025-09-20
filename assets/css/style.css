@@ -1617,6 +1617,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   .form-btn {
     --fs-6: 16px;
     padding: 16px 20px;
+    margin-top: 30px;;
   }
 
   .form-btn ion-icon { font-size: 18px; }
