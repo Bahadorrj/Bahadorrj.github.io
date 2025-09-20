@@ -356,6 +356,10 @@ main {
   border-radius: 20px;
 }
 
+.avatar {
+  border-radius: 20px;
+}
+
 .info-content .name {
   color: var(--name-normal);
   font-size: var(--fs-name);
