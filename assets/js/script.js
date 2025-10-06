@@ -74,7 +74,14 @@ class Project {
 
   // Static method to create project from object
   static fromObject(projectData) {
-    return new Project(projectData);
+    return new Project({
+      title: projectData.title,
+      description: projectData.description,
+      category: projectData.category,
+      href: projectData.href,
+      imgSrc: projectData.img?.src,  // use nested value
+      imgAlt: projectData.img?.alt
+    });
   }
 
   // Method to convert project to HTML string
@@ -94,11 +101,13 @@ class Project {
           <div class="project-item-icon-box">
             <ion-icon name="eye-outline"></ion-icon>
           </div>
+            <div class="project-item-img-box">
           <img
             src="${this.img.src}"
             alt="${this.img.alt}"
             loading="lazy"
           />
+            </div>
         </figure>
         <h3 class="project-title">
           ${this.title}
@@ -110,6 +119,7 @@ class Project {
     </li>
     `;
   }
+
 
   // Method to get project data as plain object
   toObject() {
@@ -178,48 +188,15 @@ const projects = [
   },
 ];
 
-function showProject(project) {
-  return `
-  <li
-    class="project-item active"
-    data-filter-item
-    data-category="${project.category}"
-  >
-    <a
-      href="${project.href}"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <figure class="project-img">
-        <div class="project-item-icon-box">
-          <ion-icon name="eye-outline"></ion-icon>
-        </div>
-        <div class="project-item-img-box">
-          <img
-            src="${project.img.src}"
-            alt="${project.img.alt}"
-            loading="lazy"
-          />
-        </div>
-      </figure>
-      <h3 class="project-title">
-        ${project.title}
-      </h3>
-      <p class="project-category">
-        ${project.description}
-      </p>
-    </a>
-  </li>
-  `
-}
-
 function displayAllProjects(projectsArray) {
   const projectsHTML = projectsArray
-    .map(project => showProject(project))
+    .map(p => Project.fromObject(p))
+    .map(project => project.toHTML())
     .join('');
 
   document.querySelector('.project-list').innerHTML = projectsHTML;
 }
+
 
 displayAllProjects(projects)
 
