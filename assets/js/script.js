@@ -87,36 +87,36 @@ class Project {
   // Method to convert project to HTML string
   toHTML() {
     return `
-    <li
-      class="project-item active"
-      data-filter-item
-      data-category="${this.category}"
-    >
-      <a
-        href="${this.href}"
-        target="_blank"
-        rel="noopener noreferrer"
+      <li
+        class="project-item active"
+        data-filter-item
+        data-category="${this.category}"
       >
-        <figure class="project-img">
-          <div class="project-item-icon-box">
-            <ion-icon name="eye-outline"></ion-icon>
-          </div>
-            <div class="project-item-img-box">
-          <img
-            src="${this.img.src}"
-            alt="${this.img.alt}"
-            loading="lazy"
-          />
+        <a
+          href="${this.href}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <figure class="project-img">
+            <div class="project-item-icon-box">
+              <ion-icon name="eye-outline"></ion-icon>
             </div>
-        </figure>
-        <h3 class="project-title">
-          ${this.title}
-        </h3>
-        <p class="project-category">
-          ${this.description}
-        </p>
-      </a>
-    </li>
+            <div class="project-item-img-box">
+              <img
+                src="${this.img.src}"
+                alt="${this.img.alt}"
+                loading="lazy"
+              />
+            </div>
+          </figure>
+          <h3 class="project-title">
+            ${this.title}
+          </h3>
+          <p class="project-category">
+            ${this.description}
+          </p>
+        </a>
+      </li>
     `;
   }
 
@@ -199,6 +199,130 @@ function displayAllProjects(projectsArray) {
 
 
 displayAllProjects(projects)
+
+class Certificate {
+  constructor({
+    title,
+    issuer,
+    year,
+    href,
+    imgSrc,
+    imgAlt = null
+  }) {
+    this.title = title;
+    this.issuer = issuer;
+    this.year = year;
+    this.href = href;
+    this.img = {
+      src: imgSrc,
+      alt: imgAlt || title // Use title as fallback for alt text
+    };
+  }
+
+  // Static method to create project from object
+  static fromObject(certificateData) {
+    return new Certificate({
+      title: certificateData.title,
+      issuer: certificateData.issuer,
+      year: certificateData.year,
+      href: certificateData.href,
+      imgSrc: certificateData.img?.src,  // use nested value
+      imgAlt: certificateData.img?.alt
+    });
+  }
+
+  // Method to convert project to HTML string
+  toHTML() {
+    return `
+    <li class="service-item">
+      <div class="service-icon-box">
+        <img
+          src="${this.img.src}"
+          alt="${this.img.alt}"
+          width=40px
+        />
+      </div>
+      <a
+        href="${this.href}"
+        ><div class="service-content-box">
+          <h4 class="h4 service-item-title">
+            ${this.title}
+          </h4>
+          <p class="service-item-text">${this.issuer} • ${this.year}</p>
+        </div></a
+      >
+    </li>
+    `;
+  }
+
+  // Method to get project data as plain object
+  toObject() {
+    return {
+      title: this.title,
+      issuer: this.issuer,
+      year: this.year,
+      href: this.href,
+      img: { ...this.img }
+    };
+  }
+
+  // Method to update project properties
+  update(updates) {
+    Object.assign(this, updates);
+
+    // Handle img updates specially
+    if (updates.imgSrc) {
+      this.img.src = updates.imgSrc;
+    }
+    if (updates.imgAlt) {
+      this.img.alt = updates.imgAlt;
+    }
+  }
+
+  // Method to validate project data
+  isValid() {
+    return this.title &&
+      this.issuer &&
+      this.year &&
+      this.href &&
+      this.img.src;
+  }
+}
+
+const certificate = [
+  {
+    title: "Python 101 for Data Science",
+    issuer: "Cognitive Class AI",
+    year: 2025,
+    href: "https://courses.cognitiveclass.ai/certificates/257d992a0a3a416ab5fde5c13402c768",
+    img: {
+      src: "./assets/images/cognitive_class.png",
+      alt: "Cognitive Class AI"
+    },
+  },
+  {
+    title: "Python Data Associate",
+    issuer: "DataCamp",
+    year: 2025,
+    href: "https://www.datacamp.com/certificate/PDA0014218624180",
+    img: {
+      src: "./assets/images/datacamp.png",
+      alt: "DataCamp"
+    },
+  },
+];
+
+function displayAllCertificates(certificateArray) {
+  const certificatesHTML = certificateArray
+    .map(c => Certificate.fromObject(c))
+    .map(certificate => certificate.toHTML())
+    .join('');
+
+  document.querySelector('.certificate-list').innerHTML = certificatesHTML;
+}
+
+
+displayAllCertificates(certificate)
 
 
 
